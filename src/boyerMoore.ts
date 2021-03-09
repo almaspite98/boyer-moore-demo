@@ -29,7 +29,7 @@ export function search(needle: string, haystack: string): SearchResult {
     var log: SearchLogEntry[] = [];
     var comparisons = 0;
     var badCharTable = makeBadCharTable(needle);
-    var goodSuffixTable = makeGoodSuffixTable(needle);
+    //var goodSuffixTable = makeGoodSuffixTable(needle);
 
     var haystackIndex = needle.length - 1;
     var previousHaystackIndex = -1;
@@ -65,8 +65,8 @@ export function search(needle: string, haystack: string): SearchResult {
         } else {
             comparisons++;
             var badCharShift = badCharTable(haystack.charAt(haystackIndex));
-            var goodSuffixShift = goodSuffixTable[needleIndex];
-            var shift = Math.max(badCharShift, goodSuffixShift);
+           // var goodSuffixShift = goodSuffixTable[needleIndex];
+            var shift = badCharShift;
 
             log.push({
                 comparisons: comparisons,
@@ -76,7 +76,7 @@ export function search(needle: string, haystack: string): SearchResult {
             });
 
             previousHaystackIndex = shift >= needleIndex + 1 ? haystackIndex : previousHaystackIndex;
-            haystackIndex += shift;
+            haystackIndex += Math.max(1,shift);
             needleIndex = needle.length - 1;
         }
     }
